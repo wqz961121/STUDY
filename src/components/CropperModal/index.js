@@ -12,7 +12,8 @@ export default function CropperModal(props) {
   const [state, setState] = useState({
     visible: false,
     fileList: [],
-    uploadImgPreviewUrl: '',
+    uploadImgPreviewUrl: "",
+    imgFormData: {},
   });
   const cropper = useRef();
 
@@ -22,16 +23,19 @@ export default function CropperModal(props) {
     fn({ open: () => setState({ visible: !state.visible }) });
   }, []);
 
-  const handleBeforeUpload = (file) => {
+  function handleBeforeUpload(file) {
     setState({
       fileList: [...state.fileList, file],
+      file,
+      imgFormData: file,
     });
+    return false;
   };
 
   function handleImgChange(info) {
-    console.log(info);
+    console.log(info)
     const reader = new FileReader();
-    reader.readAsDataURL({ File: info.file });
+    reader.readAsDataURL(info.file);
     reader.onload = () => {
       setState({
         uploadImgPreviewUrl: reader.result,
@@ -50,7 +54,7 @@ export default function CropperModal(props) {
       setState({ imgFormData: blob });
     });
   }
-  console.log(state.uploadImgPreviewUrl);
+  // console.log(state.uploadImgPreviewUrl);
 
   return (
     <Modal
@@ -59,38 +63,44 @@ export default function CropperModal(props) {
       visible={state.visible}
       wrapClassName="avatar-uploader-Modal"
       title="裁剪"
-      onCancel={() =>
-        setState({ visible: false }, () =>
-          setTimeout(() => console.log(state.fileList), 3000)
-        )
-      }
+      onCancel={() => setState({ visible: false })}
       // onOk={onOk}
     >
-      {/* {state.fileList.length === 0 ? ( */}
+      {state.fileList.length === 0 ? (
       <Dragger
         name="file"
         accept="image/*"
         beforeUpload={(file) => handleBeforeUpload(file)}
-        onChange={(info) => handleImgChange(info)}
+        onChange={info => handleImgChange(info)}
         fileList={state.fileList}
       >
-        <p>点击或将图片拖到此区域上传图片</p>
       </Dragger>
-      {/* // ) : (
-      //   <div style={{ display: "inline-block" }}>
-      //     <Cropper
-      //       ref={cropper}
-      //       aspectRatio={width / height}
-      //       preview=".img-preview"
-      //       src={state.uploadImgPreviewUrl}
-      //       style={{ height: 225, width: 420 }}
-      //       crop={handleAvatarCrop}
-      //       guides={false}
-      //     />
-      //     <p>预览</p>
-      //     <div className="img-preview" style={{ width: 80, height: 80 }} />
-      //   </div>
-      // )} */}
+      ) : (
+        <div style={{ display: "inline-block" }}>
+          <Cropper
+            ref={cropper}
+            aspectRatio={width / height}
+            preview=".img-preview"
+            src={state.uploadImgPreviewUrl}
+            style={{ height: 225, width: 420 }}
+            crop={handleAvatarCrop}
+            guides={false}
+          />
+          <p>预览</p>
+          <div className="img-preview" style={{ width: 80, height: 80 }} />
+          <Upload
+              name="file"
+              accept="image/*"
+              beforeUpload={file => handleBeforeUpload(file)}
+              onChange={info => handleImgChange(info)}
+              showUploadList={false}
+            >
+              <Button style={{ marginLeft: 8 }}>
+                <span>重新上传</span>
+              </Button>
+            </Upload>
+        </div>
+      )}
     </Modal>
   );
 }

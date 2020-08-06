@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 
-import CropperModal from "../Components/CropperModal";
+import CropperModal from "components/CropperModal";
 
 export default function Main() {
   // const [visible, setVisible] = useState(false);
