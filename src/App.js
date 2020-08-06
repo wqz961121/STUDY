@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy } from "react";
+import { Route, Switch } from "react-router-dom";
 
+import { getRouterData } from "./utils/router.js";
+import './uistyle.less';
 function App() {
+  const routers = getRouterData();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Suspense fallback="正在加载中">
+          <Switch>
+            {routers.map((route) => (
+              <Route
+                path={route.path}
+                component={lazy(() => import(`${route.component}`))}
+                exact={route.exact}
+              />
+            ))}
+          </Switch>
+        </Suspense>
+    </>
   );
 }
 
