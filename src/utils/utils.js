@@ -46,9 +46,75 @@ export function generateUrlWithGetParam(url, params) {
 
 // 修改颜色
 export function changeVarColor(color) {
-  if(window.less.modifyVars){
+  if (window.less.modifyVars) {
     window.less.modifyVars({
       '@primary-color': color,
     });
   }
 }
+
+// 生成树结构
+
+const comments = [
+  { id: 1, parent_id: null },
+  { id: 2, parent_id: 1 },
+  { id: 3, parent_id: 1 },
+  { id: 4, parent_id: 2 },
+  { id: 5, parent_id: 4 }
+];
+
+const nest = (items = [], id = null, link = 'parent_id') =>
+  items.filter(item => item[link] === id).map(item => ({ ...item, children: nest(items, item.id) }));
+
+console.log(nest(comments));
+
+console.log(typeof null)
+
+console.log('a' + + 'b')
+
+// 闭包
+// 函数A返回了一个函数B，并且函数B中使用了函数A中的变量，函数B就被成为闭包
+function A() {
+  let a = 1;
+  function B() {
+    console.log(a);
+  }
+  return B();
+}
+A();
+
+function loop() {
+  for (var b = 1; b < 4; b++) {
+    (function (c) {
+      setTimeout(() => {
+        console.log(c);
+      }, 1000)
+    })(b)
+  }
+}
+loop();
+
+// 浅拷贝方法
+let a = { age: 1 };
+let b = Object.assign({}, a);
+a.age = 2;
+console.log(b.age); // 1
+
+let c = { age: 1 };
+let d = { ...c };
+c.age = 2;
+console.log(d.age); // 1
+
+// 深拷贝
+let deepObj = {
+  age: 1,
+  jobs: {
+    first: 'fe'
+  }
+}
+let copy = {...deepObj}
+let deepCopy = JSON.parse(JSON.stringify(deepObj));
+deepObj.jobs.first='new';
+console.log(copy.jobs.first); // new
+
+console.log(deepCopy.jobs.first) // fe

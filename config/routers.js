@@ -14,5 +14,10 @@ module.exports = [
     path: '/cropper',
     component: 'Main',
     title: '裁剪',
+  },
+  {
+    path: '/scroll',
+    component: 'Scroll',
+    title: '滚动和高度',
   }
 ];

@@ -33,7 +33,6 @@ export default function CropperModal(props) {
   };
 
   function handleImgChange(info) {
-    console.log(info)
     const reader = new FileReader();
     reader.readAsDataURL(info.file);
     reader.onload = () => {

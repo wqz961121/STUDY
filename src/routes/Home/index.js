@@ -71,7 +71,13 @@ function App(props) {
           </Select.Option>
         </Select>
         <Link to="/cropper">to</Link>
-        <Upload name="file" onChange={(info) => console.log(info)}>
+        <Upload
+          name="file"
+          onChange={(info) => {
+            console.log(info);
+            return false;
+          }}
+        >
           <Button>点击上传</Button>
         </Upload>
       </header>
