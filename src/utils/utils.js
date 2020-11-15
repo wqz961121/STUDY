@@ -112,9 +112,9 @@ let deepObj = {
     first: 'fe'
   }
 }
-let copy = {...deepObj}
+let copy = { ...deepObj }
 let deepCopy = JSON.parse(JSON.stringify(deepObj));
-deepObj.jobs.first='new';
+deepObj.jobs.first = 'new';
 console.log(copy.jobs.first); // new
 
 console.log(deepCopy.jobs.first) // fe
@@ -132,17 +132,17 @@ console.log(deepCopy.jobs.first) // fe
 // Map、FlatMap和Reduce
 // Map作用是生成一个新数组，遍历原数组，将每个元素拿出来做一些变换然后append到新的数组中。
 // FlatMap 和 map 的作用几乎是相同的，但是对于多维数组来说，会将原数组降维。可以将 FlatMap 看成是 map + flatten ，目前该函数在浏览器中还不支持。
-const flatArr = [1 , [2, [3, 5]], 4];
-const arr = flatArr.flatMap(v=>v+1)
+const flatArr = [1, [2, [3, 5]], 4];
+const arr = flatArr.flatMap(v => v + 1)
 console.log(arr); // [ 2, '2,3,51', 5 ]
 // 多维数组彻底降维
-const flattenDeep = (arr)=>Array.isArray(arr) ? arr.reduce((a, b)=>[...a, ...flattenDeep(b)], [])
-: [arr]
+const flattenDeep = (arr) => Array.isArray(arr) ? arr.reduce((a, b) => [...a, ...flattenDeep(b)], [])
+  : [arr]
 const deepRes = flattenDeep([1, [[2], [3, [4]], 5]]);
 console.log(deepRes)
 
 // async函数 一个函数加上async，那么该函数就会返回一个Promise。
-async function test(){
+async function test() {
   return '111';
 }
 console.log(test()); // Promise { '111' }
@@ -176,4 +176,27 @@ console.log(test()); // Promise { '111' }
 // 2. CORS 需要浏览器和后端同时支持。IE 8 和 9 需要通过 XDomainRequest 来实现 
 // 服务端设置 Access-Control-Allow-Origin 就可以开启 CORS。 该属性表示哪些域名可以访问资源，如果设置通配符则表示所有网站都可以访问资源。
 
+// Event loop
 
+// 不同的任务源会被分配到不同的Task队列中，任务源可以分为微任务和宏任务，在es6规范中，微任务称为jobs，宏任务称为task。
+
+console.log('script start')
+setTimeout(function () {
+  console.log('setTimeout')
+}, 0)
+
+console.log('Promise')
+new Promise(resolve => {
+  resolve()
+}).then(function () {
+  console.log('promise1')
+})
+  .then(function () {
+    console.log('promise2')
+  })
+
+console.log('script end')
+// script start => Promise => script end => promise1 => promise2 => setTimeout
+
+// 微任务包括process.nextTick,promise,Object.observe,MutationObserver
+// 宏任务包括script.setTimeout,setInterval,setImmediate,I/O,UI rendering。
