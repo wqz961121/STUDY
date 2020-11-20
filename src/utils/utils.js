@@ -200,3 +200,74 @@ console.log('script end')
 
 // 微任务包括process.nextTick,promise,Object.observe,MutationObserver
 // 宏任务包括script.setTimeout,setInterval,setImmediate,I/O,UI rendering。
+
+
+// 手动实现一个bind函数
+Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new TypeError('Error')
+  }
+  var _this = this;
+  var args = [...arguments].slice(1)
+  console.log(arguments);
+  return function F() {
+    if (this instanceof F) {
+      return new _this(...args, ...arguments)
+    }
+    return _this.apply(context, args.concat(...arguments))
+  }
+}
+
+function aa() {
+  console.log(1)
+}
+aa.myBind(this, { e: 1 })()
+
+// 手动实现Promise
+const PENDING = 'pendind';
+const RESOLVED = 'resolved';
+const REJECTED = 'rejected';
+// promise接收一个函数参数，该函数会立即执行
+function MyPromise(fn) {
+  let _this = this;
+  _this.currentState = PENDING;
+  _this.value = undefined;
+  // 用于保存then中的回调，只要当promise状态为pending时才会缓存，并且每个实例至多缓存一个
+  _this.resolvedCallbacks = [];
+  _this.rejectedCallbacks = [];
+
+  _this.resolve = function (value) {
+    if (value instanceof MyPromise) {
+      return value.then(_this.resolve, _this.reject)
+    }
+    setTimeout(() => {
+      if (_this.currentState === PENDING) {
+        _this.currentState = RESOLVED;
+        _this.value = value;
+        _this.resolvedCallbacks.forEach(cb => cb());
+      }
+    })
+  };
+
+  _this.reject = function (reason) {
+    setTimeout(() => {
+      if (_this.currentState === PENDING) {
+        _this.currentState = REJECTED;
+        _this.value = reason;
+        _this.rejectedCallbacks.forEach(cb => cb());
+      }
+    })
+  }
+  try {
+    fn(_this.resolve, _this.reject);
+  } catch (e) {
+    _this.reject(e);
+  }
+
+  MyPromise.prototype.then = function (onResolved, onRejected) {
+    var self = this;
+    var promise2;
+    onResolved = typeof onResolved === 'function' ? onResolved : v => v;
+    onRejected = typeof onRejected === 'function' ? onRejected : r => throw r;
+  }
+}
