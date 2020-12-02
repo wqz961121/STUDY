@@ -85,9 +85,9 @@ A();
 
 function loop() {
   for (var b = 1; b < 4; b++) {
-    (function (c) {
+    (function (cc) {
       setTimeout(() => {
-        console.log(c);
+        console.log(cc);
       }, 1000)
     })(b)
   }
@@ -147,6 +147,31 @@ async function test() {
 }
 console.log(test()); // Promise { '111' }
 
+console.log(['1', '2', '3'].map(parseInt)); // [ 1, NaN, NaN ]
+
+console.log(function (x, f = () => x) {
+  var x;
+  let y = x;
+  x = 2;
+  return [x, y, f()];
+}(1));
+// [2,1,1]
+
+var foo = { n: 1 };
+var bar = foo;
+foo.x = foo = { n: 2 };
+console.log(foo.x)
+console.log(bar.x)
+// undefined { n: 2 }
+
+var ar= Array.of(1, 1, 1).fill([]);
+ar[0].push(5)
+console.log(ar)
+// [[5], [5], [5]]
+ var x=[[], [], []]
+ x[0].push(1)
+ console.log(x)
+
 // V8下的垃圾回收机制
 // V8实现了准确式GC，GC算法采用了分代式垃圾回收机制。因此，V8将内存（堆）分为新生代和老生代。
 
@@ -203,6 +228,7 @@ console.log('script end')
 
 
 // 手动实现一个bind函数
+
 Function.prototype.myBind = function (context) {
   if (typeof this !== 'function') {
     throw new TypeError('Error')
@@ -224,50 +250,99 @@ function aa() {
 aa.myBind(this, { e: 1 })()
 
 // 手动实现Promise
+
+function myPromise(constructor) {
+  let self = this;
+  self.status = 'pending';
+  self.value = undefined; // 定义状态为resolved的时候的状态
+  self.reason = undefined; // 定义状态为rejected的时候的状态
+  function resolve(value) {
+    if (self.status === 'pending') {
+      self.value = value;
+      self.status = 'resolved';
+    }
+  }
+  function reject(reason) {
+    if (self.status === 'pending') {
+      self.reason = reason;
+      self.status = 'rejected';
+    }
+  }
+  // 捕获构造异常
+  try {
+    constructor(resolve, reject);
+  } catch (e) {
+    reject(e);
+  }
+}
+myPromise.prototype.then = function (onFullfilled, onRejected) {
+  let self = this;
+  switch (self.status) {
+    case 'resolved':
+      onFullfilled(self.value);
+      break;
+    case 'rejected':
+      onRejected(self.reason);
+      break
+    default:
+  }
+}
+
 const PENDING = 'pendind';
 const RESOLVED = 'resolved';
 const REJECTED = 'rejected';
 // promise接收一个函数参数，该函数会立即执行
-function MyPromise(fn) {
-  let _this = this;
-  _this.currentState = PENDING;
-  _this.value = undefined;
-  // 用于保存then中的回调，只要当promise状态为pending时才会缓存，并且每个实例至多缓存一个
-  _this.resolvedCallbacks = [];
-  _this.rejectedCallbacks = [];
+// function MyPromise(fn) {
+//   let _this = this;
+//   _this.currentState = PENDING;
+//   _this.value = undefined;
+//   // 用于保存then中的回调，只要当promise状态为pending时才会缓存，并且每个实例至多缓存一个
+//   _this.resolvedCallbacks = [];
+//   _this.rejectedCallbacks = [];
 
-  _this.resolve = function (value) {
-    if (value instanceof MyPromise) {
-      return value.then(_this.resolve, _this.reject)
-    }
-    setTimeout(() => {
-      if (_this.currentState === PENDING) {
-        _this.currentState = RESOLVED;
-        _this.value = value;
-        _this.resolvedCallbacks.forEach(cb => cb());
-      }
-    })
-  };
+//   _this.resolve = function (value) {
+//     if (value instanceof MyPromise) {
+//       return value.then(_this.resolve, _this.reject)
+//     }
+//     setTimeout(() => {
+//       if (_this.currentState === PENDING) {
+//         _this.currentState = RESOLVED;
+//         _this.value = value;
+//         _this.resolvedCallbacks.forEach(cb => cb());
+//       }
+//     })
+//   };
 
-  _this.reject = function (reason) {
-    setTimeout(() => {
-      if (_this.currentState === PENDING) {
-        _this.currentState = REJECTED;
-        _this.value = reason;
-        _this.rejectedCallbacks.forEach(cb => cb());
-      }
-    })
-  }
-  try {
-    fn(_this.resolve, _this.reject);
-  } catch (e) {
-    _this.reject(e);
-  }
+//   _this.reject = function (reason) {
+//     setTimeout(() => {
+//       if (_this.currentState === PENDING) {
+//         _this.currentState = REJECTED;
+//         _this.value = reason;
+//         _this.rejectedCallbacks.forEach(cb => cb());
+//       }
+//     })
+//   }
+//   try {
+//     fn(_this.resolve, _this.reject);
+//   } catch (e) {
+//     _this.reject(e);
+//   }
 
-  MyPromise.prototype.then = function (onResolved, onRejected) {
-    var self = this;
-    var promise2;
-    onResolved = typeof onResolved === 'function' ? onResolved : v => v;
-    onRejected = typeof onRejected === 'function' ? onRejected : r => throw r;
-  }
-}
+//   MyPromise.prototype.then = function (onResolved, onRejected) {
+//     var self = this;
+//     var promise2;
+//     onResolved = typeof onResolved === 'function' ? onResolved : v => v;
+//     onRejected = typeof onRejected === 'function' ? onRejected : r => throw r;
+//   }
+// }
+
+
+
+// URL的输入到浏览器解析的一系列事件
+// 1. 浏览器中输入网址
+// 2. 域名解析（DNS），找到IP服务器
+// 3. 发起TCP连接，HTTP三次握手，发送请求（Request）
+// 4. 服务器响应HTTP（Response）
+// 5. 浏览器下载资源html css js images 等
+// 6. 浏览器解析代码（如果服务器有gzip压缩，浏览器先解压）
+// 7. 浏览器渲染呈现给用户

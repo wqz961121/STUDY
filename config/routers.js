@@ -19,5 +19,10 @@ module.exports = [
     path: '/scroll',
     component: 'Scroll',
     title: '滚动和高度',
+  },
+  {
+    path: '/modal',
+    component: 'FloatModal',
+    title: '手写弹框',
   }
 ];
