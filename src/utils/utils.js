@@ -53,8 +53,10 @@ export function changeVarColor(color) {
   }
 }
 
-// 生成树结构
+// 在条件判断时，除了undenfined, null, false, NaN, '',  0, -0,
+// 其他所有值都转为ture,包括所有对象。
 
+// 生成树结构
 const comments = [
   { id: 1, parent_id: null },
   { id: 2, parent_id: 1 },
@@ -168,9 +170,11 @@ var ar= Array.of(1, 1, 1).fill([]);
 ar[0].push(5)
 console.log(ar)
 // [[5], [5], [5]]
- var x=[[], [], []]
- x[0].push(1)
- console.log(x)
+var x=[[], [], []]
+x[0].push(1)
+console.log(x)
+
+console.log(typeof null)  // object
 
 // V8下的垃圾回收机制
 // V8实现了准确式GC，GC算法采用了分代式垃圾回收机制。因此，V8将内存（堆）分为新生代和老生代。
