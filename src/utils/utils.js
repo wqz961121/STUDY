@@ -350,3 +350,10 @@ const REJECTED = 'rejected';
 // 5. 浏览器下载资源html css js images 等
 // 6. 浏览器解析代码（如果服务器有gzip压缩，浏览器先解压）
 // 7. 浏览器渲染呈现给用户
+
+// 实现图片懒加载思路
+// 1.判断图片所在位置是否在可视区内。
+// offsetTop<clientHeight+scrollTop
+// element.getBoundingClientRect().top<clientHeight
+
+// 比typeOf更好的类型判断的方法 Object.prototype.toString.call();
