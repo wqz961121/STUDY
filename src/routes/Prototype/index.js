@@ -13,7 +13,6 @@ console.log(x1) //true
 let x2 = Person.prototype.constructor === Person;
 console.log(x2);
 
-
 // 每个对象都有一个__proto__属性，并且指向它的prototype原型对象
 // 每个构造函数都有一个prototype原型对象
 // prototype原型对象里的constructor指向对象本身

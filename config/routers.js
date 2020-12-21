@@ -24,5 +24,15 @@ module.exports = [
     path: '/modal',
     component: 'FloatModal',
     title: '手写弹框',
+  },
+  {
+    path: '/width',
+    component: 'WidthHeight',
+    title: '宽高'
+  },
+  {
+    path: '/layout',
+    component: 'Layout',
+    title: '布局'
   }
 ];
