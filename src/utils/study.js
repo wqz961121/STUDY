@@ -434,3 +434,16 @@
 // }
 // f1()
 // console.log(3)
+
+
+// var a = function c(){
+//   console.log(typeof c);
+// }
+// a(); // function 
+
+// var f = function g(){ 
+//   return 23; 
+// };
+// typeof g(); // error
+// 在采用函数表达式声明函数时,function后面通常是不带函数名的，若加上函数名（如题目),
+// 则该函数只在函数体内有效，指代函数表达式本身，在函数体外无效，表现为未声明。
