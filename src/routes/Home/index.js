@@ -30,8 +30,8 @@ function App(props) {
   };
   const changeColor = () => {
     const primaryColor = colors["A"]["primary-color"];
-    changeAllColor("A");
-    changeVarColor(primaryColor);
+    changeAllColor("A");  // 修改页面主题色
+    changeVarColor(primaryColor); // 修改antd主题色
     _dispatch({
       type: "global/update",
       payload: { theme: { ...theme, "primary-color": primaryColor } },
