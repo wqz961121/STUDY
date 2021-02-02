@@ -19,6 +19,9 @@ export default function FloatModal() {
     <div className={styles["content"]}>
       <Button onClick={() => handleOpen()}>打开弹框</Button>
       <input ref={(e) => (inp.current = e)} />
+      <div class="parent">
+        <div class="floa">浮动元素</div>
+      </div>
       <div className={`${visible ? "float" : "common"}`} />
       <div
         className="modal"
