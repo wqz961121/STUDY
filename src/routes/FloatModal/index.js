@@ -15,6 +15,13 @@ export default function FloatModal() {
   useEffect(() => {
     console.log(1);
   }, [visible]);
+
+  useEffect(() => {
+		console.log(window.location.hostname);
+		console.log(window.location.protocol);
+    console.log(window.location.hash);
+  }, []);
+
   return (
     <div className={styles["content"]}>
       <Button onClick={() => handleOpen()}>打开弹框</Button>
