@@ -34,5 +34,9 @@ module.exports = [
     path: '/layout',
     component: 'Layout',
     title: '布局'
+  },
+  {
+    path: '/life',
+    component: 'LifeCycle',
   }
 ];
