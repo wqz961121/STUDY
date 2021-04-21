@@ -1,0 +1,66 @@
+.content {
+	:global {
+		.parent{
+			overflow: hidden;
+			border: 1px solid pink;
+			.floa{
+				height: 200px;
+				float: left;
+				background-color: deepskyblue;
+			}
+		}
+		.float {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: rgba(0, 0, 0, 0.3);
+			z-index: 100;
+		}
+
+		.common {
+			position: fixed;
+			// top: 0;
+			// bottom: 0;
+			// left: 0;
+			// right: 0;
+			// background: rgb(0, 0, 0);
+			// z-index: 100;
+		}
+
+		.modal {
+			z-index: 101;
+			position: relative;
+			background: #fff;
+			width: 300px;
+			height: 60px;
+			margin: 0 auto;
+			.close{
+				cursor: pointer;
+				&::before{
+					content: '';
+					position: absolute;
+					display: block;
+					right: 0px;
+					top: -5px;
+					width: 10px;
+					height: 2px;
+					transform: rotate(45deg);
+					background: black;
+				}
+				&::after{
+					content: '';
+					display: block;
+					position: absolute;
+					width: 10px;
+					height: 2px;
+					right: 0px;
+					top: -5px;
+					transform: rotate(135deg);
+					background: black;
+				}
+			}
+		}
+	}
+}

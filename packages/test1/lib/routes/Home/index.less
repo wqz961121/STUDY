@@ -1,0 +1,17 @@
+.App {
+  // background-color: #333;
+  :global {
+    .name {
+      background-color: @primary-color;
+    }
+    .text{
+      color: @primary-color;
+      &:hover{
+        color: @primary-hover-color;
+      }
+    }
+    .aa:hover{
+      border-color: @primary-hover-color;
+    }
+  }
+}
