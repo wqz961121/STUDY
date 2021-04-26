@@ -36,6 +36,8 @@
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-config-react-app": "^5.2.1",
     "eslint-loader": "3.0.3",
     "eslint-plugin-flowtype": "4.6.0",
@@ -47,6 +49,7 @@
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
     "hzero-ui": "1.0.70",
+    "husky": "^1.3.1",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
@@ -54,6 +57,7 @@
     "jest-watch-typeahead": "0.4.2",
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
+    "lint-staged": "^8.1.5",
     "mini-css-extract-plugin": "0.9.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
@@ -97,10 +101,20 @@
     "start": "node color && node scripts/start.js",
     "build": "node color && node scripts/build.js",
     "test": "node scripts/test.js",
-    "transpile": "cross-env NODE_ENV=production npx babel src --out-dir lib --copy-files"
+    "transpile": "cross-env NODE_ENV=production npx babel src --out-dir lib --copy-files",
+    "lint-staged": "lint-staged",
+    "lint:fix": "exlint --ext .js"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
+  },
+  "lint-staged": {
+    "packages/**/src/**/*.{js,jsx}": "eslint --quiet --fix --ext .js,.jsx"
   },
   "browserslist": {
     "production": [
